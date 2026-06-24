@@ -4,7 +4,7 @@
  */
 {
     "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "atypon2webflow-routes",
+    "name": "www-webflow-routes",
     "main": "src/index.js",
     "compatibility_date": "2026-06-23",
     "observability": {
