@@ -9,13 +9,14 @@ addEventListener('fetch', event => {
 
 async function handleRequest(request) {
     const url = new URL(request.url)
-    const { pathname } = url
+    let { search, pathname } = url
     let targetUrl
-    /* sanity check */
+    /* this is to get around that goofy route */
+    if (request.url.includes('/30th-anniversary')) { pathname = "" }
     if (url.hostname === 'www.atypon.com') {
-	targetUrl = `https://prod.webflow.atypon.com/`
-    } else { /* kick it back to the old platform */
-	targetUrl = `https://www.atypon.com/${pathname}`
+	targetUrl = `https://prod.webflow.atypon.com/${pathname}${search}`
+    } else { /* non-prod */
+	targetUrl = `https://staging.webflow.atypon.com/${pathname}${search}`
     }
 
     return fetch(targetUrl)
