@@ -15,16 +15,11 @@
 	"nodejs_compat"
     ],
     "routes": [
-	/* for locale list, see locale-list.txt */
 	/* staging routes */
-	{
-	    "pattern": "www.atypon.com/30th-anniversary*",
-	    "zone_name": "atypon.com"
-	},
 	{
 	    "pattern": "uat.www.atypon.com/*",
 	    "zone_name": "atypon.com"
-	},
+	}
     ]
     /**
      * Smart Placement

@@ -1,6 +1,6 @@
 /**
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker 
+ * - run `npx wrangler dev` to run it locally
+ * - run `npx wrangler deploy` to publish the worker to research-technology-atypon
  */
 
 addEventListener('fetch', event => {
@@ -11,8 +11,17 @@ async function handleRequest(request) {
     const url = new URL(request.url)
     let { search, pathname } = url
     let targetUrl
-    /* this is to get around that goofy route */
-    if (request.url.includes('/30th-anniversary')) { pathname = "" }
+
+    /* handle the sitemap and robots scenarios */
+    if (pathname === '/sitemap.xml' || pathname === 'robots.txt') {
+	const response = await fetch(request)
+	const text = await response.text()
+	const body = text.replaceAll('https://prod.webflow.atypon.com',
+				     'https://www.atypon.com')
+	const headers = new Headers(response.headers)
+	headers.delete('context-length') // we just messed this value up
+	return new Response(body, { status: response.status, headers })
+    }
     if (url.hostname === 'www.atypon.com') {
 	targetUrl = `https://prod.webflow.atypon.com/${pathname}${search}`
     } else { /* non-prod */
