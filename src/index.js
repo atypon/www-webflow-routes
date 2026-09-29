@@ -12,9 +12,15 @@ async function handleRequest(request) {
     let { search, pathname } = url
     let targetUrl
 
-    /* handle the sitemap and robots scenarios */
+    if (url.hostname === 'www.atypon.com') {
+	targetUrl = `https://prod.webflow.atypon.com/${pathname}${search}`
+    } else { /* non-prod */
+	targetUrl = `https://staging.webflow.atypon.com/${pathname}${search}`
+    }
+
+        /* handle the sitemap and robots scenarios */
     if (pathname === '/sitemap.xml' || pathname === 'robots.txt') {
-	const response = await fetch(request)
+	const response = await fetch(targetUrl)
 	const text = await response.text()
 	const body = text.replaceAll('https://prod.webflow.atypon.com',
 				     'https://www.atypon.com')
@@ -22,11 +28,5 @@ async function handleRequest(request) {
 	headers.delete('context-length') // we just messed this value up
 	return new Response(body, { status: response.status, headers })
     }
-    if (url.hostname === 'www.atypon.com') {
-	targetUrl = `https://prod.webflow.atypon.com/${pathname}${search}`
-    } else { /* non-prod */
-	targetUrl = `https://staging.webflow.atypon.com/${pathname}${search}`
-    }
-
     return fetch(targetUrl)
 }
