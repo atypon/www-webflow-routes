@@ -19,6 +19,11 @@
 	{
 	    "pattern": "uat.www.atypon.com/*",
 	    "zone_name": "atypon.com"
+	},
+	/* production routes */
+	{
+	    "pattern": "www.atypon.com/*",
+	    "zone_name": "atypon.com"
 	}
     ]
     /**
