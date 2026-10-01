@@ -7,6 +7,12 @@ addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request))
 })
 
+class RemoveElement {
+    element(element) {
+        element.remove();
+    }
+}
+
 async function handleRequest(request) {
     const url = new URL(request.url)
     let { search, pathname } = url
@@ -28,5 +34,8 @@ async function handleRequest(request) {
 	headers.delete('context-length') // we just messed this value up
 	return new Response(body, { status: response.status, headers })
     }
-    return fetch(targetUrl)
+    const response = await fetch(targetUrl);
+    return new HTMLRewriter()
+	.on('meta[name="robots"]', new RemoveElement())
+	.transform(response);
 }
